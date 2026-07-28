@@ -8,7 +8,7 @@ public class HelloController {
 
     @GetMapping("/")
     public String home() {
-        return "Welcome to Enterprise DevOps Project!";
+        return "Welcome to Enterprise DevOps Project - Version 2!";
     }
 
     @GetMapping("/health")
