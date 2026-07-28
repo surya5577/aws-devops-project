@@ -2,9 +2,10 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "557757/aws-devops-project:v1"
-        CONTAINER_NAME = "springboot-app"
-    }
+    DOCKER_REPO = "557757/aws-devops-project"
+    IMAGE_TAG = "${BUILD_NUMBER}"
+    CONTAINER_NAME = "springboot-app"
+}
 
     stages {
 
@@ -22,7 +23,9 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $IMAGE_NAME .'
+                sh ''' docker build \
+-t $DOCKER_REPO:$IMAGE_TAG \
+-t $DOCKER_REPO:latest .'''
             }
         }
 
@@ -42,7 +45,8 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                sh 'docker push $IMAGE_NAME'
+                sh '''docker push $DOCKER_REPO:$IMAGE_TAG
+                   docker push $DOCKER_REPO:latest'''
             }
         }
 
@@ -53,9 +57,9 @@ pipeline {
                 docker rm $CONTAINER_NAME || true
 
                 docker run -d \
-                  --name $CONTAINER_NAME \
-                  -p 8081:8081 \
-                  $IMAGE_NAME
+--name $CONTAINER_NAME \
+-p 8081:8081 \
+$DOCKER_REPO:latest
                 '''
             }
         }
