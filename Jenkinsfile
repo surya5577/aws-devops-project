@@ -51,17 +51,17 @@ pipeline {
         }
 
         stage('Deploy Container') {
-            steps {
-                sh '''
-                docker stop $CONTAINER_NAME || true
-                docker rm $CONTAINER_NAME || true
+    steps {
+        sh '''
+        docker stop $CONTAINER_NAME || true
+        docker rm $CONTAINER_NAME || true
 
-                docker run -d \
---name $CONTAINER_NAME \
--p 8081:8081 \
-$DOCKER_REPO:latest
-                '''
-            }
-        }
+        docker run -d \
+          --name $CONTAINER_NAME \
+          -p 8081:8081 \
+          $DOCKER_REPO:$IMAGE_TAG
+        '''
+    }
+}
     }
 }
