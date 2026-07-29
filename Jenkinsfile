@@ -44,11 +44,19 @@ pipeline {
         }
 
         stage('Push Docker Image') {
-            steps {
-                sh '''docker push $DOCKER_REPO:$IMAGE_TAG
-                   docker push $DOCKER_REPO:latest'''
-            }
-        }
+    steps {
+        sh '''
+        echo "===== Docker Images ====="
+        docker images
+
+        echo "===== Pushing Build Tag ====="
+        docker push $DOCKER_REPO:$IMAGE_TAG
+
+        echo "===== Pushing Latest ====="
+        docker push $DOCKER_REPO:latest
+        '''
+    }
+}
 
         stage('Deploy Container') {
     steps {
