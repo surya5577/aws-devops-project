@@ -75,13 +75,32 @@ stage('Health Check') {
     steps {
         sh '''
         echo "Waiting for application..."
-        sleep 15
 
-        docker exec $CONTAINER_NAME curl --fail http://localhost:8081
+        for i in {1..6}
+        do
+            if docker exec $CONTAINER_NAME curl --fail http://localhost:8081
+            then
+                echo "Application is Healthy"
+                exit 0
+            fi
 
-        echo "Application is Healthy"
+            echo "Retry $i..."
+            sleep 5
+        done
+
+        echo "Health Check Failed"
+        exit 1
         '''
     }
 }
+stage('Cleanup') {
+    steps {
+        sh '''
+        echo "Cleaning old dangling Docker images..."
+        docker image prune -f
+        '''
+    }
+}
+
     }
 }
