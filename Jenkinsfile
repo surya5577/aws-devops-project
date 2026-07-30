@@ -75,7 +75,7 @@ stage('Health Check') {
     steps {
         sh '''
         echo "Waiting for application to start..."
-        sleep 15
+        sleep 16
 
         curl --fail http://localhost:8081
 
