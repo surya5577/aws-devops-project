@@ -74,10 +74,10 @@ pipeline {
 stage('Health Check') {
     steps {
         sh '''
-        echo "Waiting for application to start..."
-        sleep 16
+        echo "Waiting for application..."
+        sleep 15
 
-        curl --fail http://localhost:8081
+        docker exec $CONTAINER_NAME curl --fail http://localhost:8081
 
         echo "Application is Healthy"
         '''
